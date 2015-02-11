@@ -1,0 +1,139 @@
+﻿@model WebApplication1.Models.TreatmentService
+@{
+    ViewBag.Title = "Treatment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+};
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <h3>Select Centre For Irder</h3>
+    <hr/>
+    @Html.ValidationSummary()
+    <h2>Treatment</h2>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Voter ID</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="name" id="name" placeholder="Voter ID">
+
+            </div>
+        </div>
+        <div>
+            
+        </div>
+    </form>
+    <div>
+
+        <form class="form-group" id="MedicineCetre">
+            <table id="information-table" class="table table-striped">
+                <thead>
+              
+                </thead>
+                <tbody></tbody>
+            </table>
+            <input type="submit" value="Show Details" id="showdetails" class="btn btn-default" />
+            </form>
+</div>
+
+    <div id="booksDiv">
+    </div>
+    
+    <div class="form-group">
+        @Html.Label("Select Medicine:", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownList("Medicine", null, new { @class = "form-control" })
+            <label for="Dose">Dose</label>
+              <select id="dose">
+                <option>--Select---</option>
+                <option>1-1-1</option>
+                <option>1-1-0</option>
+                <option>1-0-1</option>
+                <option>0-1-1</option>
+                <option>0-0-1</option>
+            </select>
+
+
+            <div class="form-group">
+                <label for="exampleInputName2">Quantity Gievn</label>
+                <input type="text" class="form-control" id="qtyGiven" placeholder="Quantity Gievn">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail2">Note</label>
+                <input type="text" class="form-control" id="note" placeholder="Note">
+            </div>
+
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="beforMeal" value="option1"> Befor male
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="after Meal" value="option2"> After Meal
+            </label>
+        </div>
+    </div><br />
+
+    <form class="form-group" id="MedicineCetre">
+        <table id="example-table" class="table table-striped">
+            <thead>
+                <tr class='warning'>
+                    <th>Disease</th>
+                    <th>Medicine</th>
+                    <th>Dose</th>
+                    <th>Befor/After</th>
+                    <th>Given Quantity</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <input type="submit" value="Save" id="convert-table" class="btn btn-default" />
+    </form>
+
+
+   
+}
+
+
+@section Scripts {
+   
+     <script>
+      $(document).ready(function (){
+        $("#showdetails").click(function(){
+            var voterid = $("#name").val();
+            var booksDiv = $("#booksDiv");
+            alert(voterid);
+            var tempData = { Voter_id: voterid };
+           
+           
+            $.ajax({
+                
+                type: "POST",
+                url : '@Url.Action("VoterInformation", "Centre")',
+                contentType: "application/json; charset=utf-8",
+                data:JSON.stringify(tempData),
+                dataType: "json",
+                success: function (aList) {
+                   // alert("message");
+                    for (var i = 0; i < aList.length; i++)
+                       {
+                    // alert("inside table");
+                    //   $("#Centre").append("<option>" + centreList[i] + "</option>");
+                       $("#information-table").append('<tr><td>' + aList[i] + '</td></tr>');
+                    }
+
+
+                    
+                    return aList;
+                },
+                error: function (aList)
+                {
+                    alert("error");
+                }
+
+
+                  });
+        });
+	 });
+
+
+    </script>
+}
